@@ -47,8 +47,8 @@ function fetchCountries(name) {
 
 
 function createCardsCountrieslist(Items) {
-    const listCountries = Items.map(({ name, flags }) => {
-        if (Items.length >= 1) {
+    if (Items.length <= 10) {
+        const listCountries = Items.map(({ name, flags }) => {
             return `
                 <li>
                     ${name.official}
@@ -57,10 +57,14 @@ function createCardsCountrieslist(Items) {
                     </svg>
                 </li>
             `
-        };
-    }).join("");
+      
+        }).join("");
 
-    countryList.innerHTML = listCountries;
+        countryList.innerHTML = listCountries;
+    } else if (Items.length > 10) {
+        clearLines();
+        Notify.info("Too many matches found. Please enter a more specific name.");
+    }
 };
 
 
