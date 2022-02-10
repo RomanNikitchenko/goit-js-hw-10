@@ -50,14 +50,11 @@ function createCardsCountrieslist(Items) {
     if (Items.length <= 10) {
         const listCountries = Items.map(({ name, flags }) => {
             return `
-                <li>
+                <li class="country-list__item">
                     ${name.official}
-                    <svg class="icon" width="24" height="24">
-                        <use href="${flags.svg}"></use>
-                    </svg>
+                    <img class="country-list__img" src="${flags.svg}" alt="Сountry flag ${name.official}" width="24">
                 </li>
             `
-      
         }).join("");
 
         countryList.innerHTML = listCountries;
