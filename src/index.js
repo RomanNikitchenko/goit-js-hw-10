@@ -72,25 +72,15 @@ function countryInformationCard(Items) {
     const countryInformation = Items.map(({ capital, population, languages }) => {
         if (Items.length === 1) {
 
-            const values = Object.values(languages);
+            const valuesLanguages = Object.values(languages).join(", ");
         
-            const listLanguages = []
-            for (const value of values) {
-                listLanguages.push(value);
-            }
-            const languagesLine = listLanguages.join(" ");
-
-            const capitals = [];
-            for (const item of capital) {
-                capitals.push(item)
-            };
-            const capitalsLine = capitals.join(" ");
+            const capitalsLine = capital.join(", ");
 
             return `
                 <ul class="list">
-                    <li class="list__item">Capital: ${capitalsLine}</li>
+                    <li class="list__item">Capital: ${capitalsLine}.</li>
                     <li class="list__item">Population: ${population}</li>
-                    <li class="list__item">Languages: ${languagesLine}</li>
+                    <li class="list__item">Languages: ${valuesLanguages}.</li>
                 </ul>
             `
         };
