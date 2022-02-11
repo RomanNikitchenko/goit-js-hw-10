@@ -1,7 +1,7 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import fetchCountries from './countries-service';
+import fetchCountries from './fetchCountries';
 const DEBOUNCE_DELAY = 300;
 
 const searchBox = document.querySelector('#search-box');
@@ -18,23 +18,22 @@ function clearLines() {
 
 function onSearch(e) {
     e.preventDefault();
-
-    console.log(e.target.value === '');
-     
-    if (e.target.value.length === 1) {
+    
+    if (e.target.value.trim().length === 1) {
         Notify.info("Too many matches found. Please enter a more specific name.");
         clearLines();
-    } else if (e.target.value.length > 1) {
+    } else if (e.target.value.trim().length > 1) {
         fetchCountries(e.target.value)
-            .then(r => {
+            .then((r) => {
                 createCardsCountrieslist(r);
                 countryInformationCard(r);
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 Notify.failure("Oops, there is no country with that name");
                 clearLines();
             });
-    } else if (e.target.value.length === 0) {
+    } else if (e.target.value.trim().length === 0) {
         clearLines();
     };
 };
@@ -59,26 +58,22 @@ function createCardsCountrieslist(Items) {
 
 
 function countryInformationCard(Items) {
-    const countryInformation = Items.map(({ capital, population, languages }) => {
-        if (Items.length === 1) {
+    if (Items.length === 1) {
+        const countryInformation = Items.map(({ capital, population, languages }) => {
+            searchBox.value = '';
 
             const valuesLanguages = Object.values(languages).join(", ");
-        
+            
             const capitalsLine = capital.join(", ");
 
             return `
-                <ul class="list">
-                    <li class="list__item">Capital: ${capitalsLine}.</li>
-                    <li class="list__item">Population: ${population}</li>
-                    <li class="list__item">Languages: ${valuesLanguages}.</li>
-                </ul>
-            `
-        };
-    }).join("");
-
-    if (Items.length === 1) {
-        searchBox.value = '';
-    }
-
-    countryInfo.innerHTML = countryInformation;
+                    <ul class="list">
+                        <li class="list__item">Capital: ${capitalsLine}.</li>
+                        <li class="list__item">Population: ${population}</li>
+                        <li class="list__item">Languages: ${valuesLanguages}.</li>
+                    </ul>
+                `
+        }).join("");
+        countryInfo.innerHTML = countryInformation;
+    };
 };
