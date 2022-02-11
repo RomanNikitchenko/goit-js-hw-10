@@ -1,7 +1,7 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
+import fetchCountries from './countries-service';
 const DEBOUNCE_DELAY = 300;
 
 const searchBox = document.querySelector('#search-box');
@@ -19,7 +19,12 @@ function clearLines() {
 function onSearch(e) {
     e.preventDefault();
 
-    if (e.target.value.length > 1) {
+    console.log(e.target.value === '');
+     
+    if (e.target.value.length === 1) {
+        Notify.info("Too many matches found. Please enter a more specific name.");
+        clearLines();
+    } else if (e.target.value.length > 1) {
         fetchCountries(e.target.value)
             .then(r => {
                 createCardsCountrieslist(r);
@@ -29,22 +34,10 @@ function onSearch(e) {
                 Notify.failure("Oops, there is no country with that name");
                 clearLines();
             });
-    } else if (e.target.value.length === 1) {
-        Notify.info("Too many matches found. Please enter a more specific name.");
-        clearLines();
     } else if (e.target.value.length === 0) {
         clearLines();
     };
 };
-
-
-function fetchCountries(name) {
-    return fetch(`https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,flags,languages`)
-        .then(r => {
-            return r.json();
-        });
-};
-
 
 function createCardsCountrieslist(Items) {
     if (Items.length <= 10) {
@@ -82,6 +75,10 @@ function countryInformationCard(Items) {
             `
         };
     }).join("");
+
+    if (Items.length === 1) {
+        searchBox.value = '';
+    }
 
     countryInfo.innerHTML = countryInformation;
 };
