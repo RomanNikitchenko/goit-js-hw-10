@@ -27,7 +27,6 @@ function onSearch(e) {
             .then((r) => {
                 createCardsCountrieslist(r);
                 countryInformationCard(r);
-                countryInf(r);
             })
             .catch((error) => {
                 console.log(error);
