@@ -27,6 +27,7 @@ function onSearch(e) {
             .then((r) => {
                 createCardsCountrieslist(r);
                 countryInformationCard(r);
+                countryInf(r);
             })
             .catch((error) => {
                 console.log(error);
@@ -75,5 +76,7 @@ function countryInformationCard(Items) {
                 `
         }).join("");
         countryInfo.innerHTML = countryInformation;
+    } else {
+        countryInfo.innerHTML = '';
     };
 };
