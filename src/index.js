@@ -16,23 +16,34 @@ function clearLines() {
     countryInfo.innerHTML = '';
 }
 
-function onSearch(e) {
+async function onSearch(e) {
     e.preventDefault();
     
     if (e.target.value.trim().length === 1) {
         Notify.info("Too many matches found. Please enter a more specific name.");
         clearLines();
     } else if (e.target.value.trim().length > 1) {
-        fetchCountries(e.target.value)
-            .then((r) => {
-                createCardsCountrieslist(r);
-                countryInformationCard(r);
-            })
-            .catch((error) => {
-                console.log(error);
-                Notify.failure("Oops, there is no country with that name");
-                clearLines();
-            });
+        // fetchCountries(e.target.value)
+        //     .then((r) => {
+        //         createCardsCountrieslist(r);
+        //         countryInformationCard(r);
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //         Notify.failure("Oops, there is no country with that name");
+        //         clearLines();
+        //     });
+        
+        try {
+            const countries = await fetchCountries(e.target.value);
+            createCardsCountrieslist(countries);
+            countryInformationCard(countries);
+        } catch {
+            console.log("ошибка");
+            Notify.failure("Oops, there is no country with that name");
+            clearLines();
+        }
+            
     } else if (e.target.value.trim().length === 0) {
         clearLines();
     };
